@@ -27,8 +27,10 @@ namespace angle
 namespace
 {
 
+#if defined(ANGLE_ENABLE_OPENGL)
 constexpr CGLRendererProperty kCGLRPRegistryIDLow  = static_cast<CGLRendererProperty>(140);
 constexpr CGLRendererProperty kCGLRPRegistryIDHigh = static_cast<CGLRendererProperty>(141);
+#endif
 
 // Extracts one integer property from a registry entry.
 bool GetEntryProperty(io_registry_entry_t entry, CFStringRef name, uint32_t *value)
@@ -235,6 +237,7 @@ uint64_t GetGpuIDFromDisplayID(uint32_t displayID)
 // Used with permission.
 uint64_t GetGpuIDFromOpenGLDisplayMask(uint32_t displayMask)
 {
+#if defined(ANGLE_ENABLE_OPENGL)
     if (@available(macOS 10.13, *))
     {
         GLint numRenderers              = 0;
@@ -273,7 +276,7 @@ uint64_t GetGpuIDFromOpenGLDisplayMask(uint32_t displayMask)
         return (static_cast<uint64_t>(static_cast<uint32_t>(gpuIDHigh)) << 32) |
                static_cast<uint64_t>(static_cast<uint32_t>(gpuIDLow));
     }
-
+#endif
     return 0;
 }
 
